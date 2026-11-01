@@ -1,0 +1,35 @@
+{
+  "name": "chainid-guard",
+  "version": "1.0.0",
+  "description": "Network configuration inspection tool verifying wallet, application, and RPC configuration for Botchain Testnet (Chain ID: 968)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:botchain": "hardhat run scripts/deploy.cjs --network botchainTestnet"
+  },
+  "dependencies": {
+    "@reown/appkit": "^1.6.8",
+    "@reown/appkit-adapter-wagmi": "^1.6.8",
+    "@tanstack/react-query": "^5.66.0",
+    "dotenv": "^16.4.7",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "^2.23.0",
+    "wagmi": "^2.14.11"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "hardhat": "^2.22.18",
+    "postcss": "^8.5.2",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.1.0"
+  }
+}
+
