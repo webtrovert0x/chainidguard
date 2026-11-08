@@ -1,8 +1,38 @@
 /**
  * Chain Directory & Helper Metadata
- * Primary target: Botchain Testnet (Chain ID: 968)
- * Also catalogs well-known EVM networks to detect and display misconfigurations.
+ * Primary target: Botchain Mainnet (Chain ID: 677)
+ * Also catalogs Botchain Testnet (968) and well-known EVM networks to detect and display misconfigurations.
  */
+export const BOTCHAIN_MAINNET = {
+  id: 677,
+  name: 'Botchain Mainnet',
+  symbol: 'BOT',
+  nativeCurrency: {
+    name: 'BOT',
+    symbol: 'BOT',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.botchain.ai'],
+    },
+    public: {
+      http: ['https://rpc.botchain.ai'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'BotchainScan',
+      url: 'https://scan.botchain.ai',
+    },
+  },
+  rpc: 'https://rpc.botchain.ai',
+  explorer: 'https://scan.botchain.ai',
+  testnet: false,
+  isTestnet: false,
+  isPrimary: true,
+};
+
 export const BOTCHAIN_TESTNET = {
   id: 968,
   name: 'Botchain Testnet',
@@ -30,10 +60,11 @@ export const BOTCHAIN_TESTNET = {
   explorer: 'https://scan.bohr.life',
   testnet: true,
   isTestnet: true,
-  isPrimary: true,
+  isPrimary: false,
 };
 
 export const POPULAR_CHAINS = [
+  BOTCHAIN_MAINNET,
   BOTCHAIN_TESTNET,
   { id: 1, name: 'Ethereum Mainnet', symbol: 'ETH', isTestnet: false, rpc: 'https://eth.llamarpc.com', explorer: 'https://etherscan.io' },
   { id: 11155111, name: 'Sepolia Testnet', symbol: 'ETH', isTestnet: true, rpc: 'https://rpc.sepolia.org', explorer: 'https://sepolia.etherscan.io' },

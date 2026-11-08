@@ -9,7 +9,7 @@ describe("ChainIDGuard Contract", function () {
 
   beforeEach(async function () {
     [owner, user1, user2] = await ethers.getSigners();
-    const ChainIDGuard = await ethers.getContractFactory("ChainIDGuard");
+    const ChainIDGuard = await ethers.getContractFactory("contracts/ChainIDGuard.sol:ChainIDGuard");
     guard = await ChainIDGuard.deploy();
     await guard.waitForDeployment();
   });

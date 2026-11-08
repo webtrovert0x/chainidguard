@@ -18,15 +18,45 @@ module.exports = {
       },
     },
   },
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
       chainId: 31337,
+    },
+    botchainMainnet: {
+      url: "https://rpc.botchain.ai",
+      chainId: 677,
+      accounts: [deployerKey],
     },
     botchainTestnet: {
       url: "https://rpc.bohr.life",
       chainId: 968,
       accounts: [deployerKey],
     },
+  },
+  etherscan: {
+    apiKey: {
+      botchainMainnet: "empty",
+      botchainTestnet: "empty",
+    },
+    customChains: [
+      {
+        network: "botchainMainnet",
+        chainId: 677,
+        urls: {
+          apiURL: "https://scan.botchain.ai/api",
+          browserURL: "https://scan.botchain.ai",
+        },
+      },
+      {
+        network: "botchainTestnet",
+        chainId: 968,
+        urls: {
+          apiURL: "https://scan.bohr.life/api",
+          browserURL: "https://scan.bohr.life",
+        },
+      },
+    ],
   },
   paths: {
     sources: "./contracts",
@@ -35,4 +65,3 @@ module.exports = {
     artifacts: "./artifacts",
   },
 };
-

@@ -5,8 +5,8 @@
 > Eliminate accidental cross-network deployments. Verify that your wallet provider, custom RPC endpoint, and on-chain contract execution environment are targeting the exact expected blockchain.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Network: Botchain Testnet](https://img.shields.io/badge/Network-Botchain%20Testnet-0066FF.svg)](https://scan.bohr.life)
-[![Chain ID: 968](https://img.shields.io/badge/Chain%20ID-968-blue.svg)](https://scan.bohr.life)
+[![Network: Botchain Mainnet](https://img.shields.io/badge/Network-Botchain%20Mainnet-0066FF.svg)](https://scan.botchain.ai)
+[![Chain ID: 677](https://img.shields.io/badge/Chain%20ID-677-blue.svg)](https://scan.botchain.ai)
 
 ---
 
@@ -24,18 +24,20 @@ For comprehensive technical analysis and mathematical threat modeling, see the [
 
 ---
 
-## 🌐 Botchain Testnet Deployment
+## 🌐 Botchain Mainnet Deployment
 
-ChainID Guard is deployed on **Botchain Testnet**:
+ChainID Guard is deployed on **Botchain Mainnet**:
 
 | Parameter | Value |
 | :--- | :--- |
-| **Network Name** | Botchain Testnet |
-| **Chain ID** | `968` |
+| **Network Name** | Botchain Mainnet |
+| **Chain ID** | `677` |
 | **Native Token** | `BOT` (18 Decimals) |
-| **RPC Endpoint** | `https://rpc.bohr.life` |
-| **Block Explorer** | [scan.bohr.life](https://scan.bohr.life) |
-| **Deployed Contract** | [`0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E`](https://scan.bohr.life/address/0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E) |
+| **RPC Endpoint** | `https://rpc.botchain.ai` |
+| **Block Explorer** | [scan.botchain.ai](https://scan.botchain.ai) |
+| **Deployed Contract** | [`0x2cE7FC031228adEbf5d7f40D812284071A31FF35`](https://scan.botchain.ai/address/0x2cE7FC031228adEbf5d7f40D812284071A31FF35#code) |
+
+*Also backward compatible with Botchain Testnet (Chain ID: `968`, [`0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E`](https://scan.bohr.life/address/0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E)).*
 
 ---
 
@@ -43,12 +45,12 @@ ChainID Guard is deployed on **Botchain Testnet**:
 
 - **Wallet Connection**: Powered by `@reown/appkit`, `@reown/appkit-adapter-wagmi`, `wagmi@2.x`, `viem`, and `@tanstack/react-query`.
 - **4-Way Comparison Matrix**:
-  - **Expected Chain ID**: Pre-configured for Botchain Testnet (`968`), with comparison presets for Ethereum Mainnet, Sepolia, Base, Arbitrum, Polygon, and Hardhat.
+  - **Expected Chain ID**: Pre-configured for Botchain Mainnet (`677`), with comparison presets for Botchain Testnet, Ethereum Mainnet, Sepolia, Base, Arbitrum, Polygon, and Hardhat.
   - **Connected Wallet Chain ID**: Real-time detection from injected or mobile providers.
-  - **RPC-Reported Chain ID**: Custom RPC input (defaults to `https://rpc.bohr.life`) with live latency and health probing via `eth_chainId`.
+  - **RPC-Reported Chain ID**: Custom RPC input (defaults to `https://rpc.botchain.ai`) with live latency and health probing via `eth_chainId`.
   - **On-Chain Runtime**: Ground-truth confirmation executed directly through `block.chainid`.
 - **Configuration Warnings**:
-  - 🚨 **Critical Hazard Alert**: Flags when a wallet is connected to a real-value Mainnet while expecting a Testnet.
+  - 🚨 **Critical Hazard Alert**: Flags when a wallet is connected to an unintended network while expecting Botchain Mainnet.
   - ⚠️ **RPC Desync Alert**: Warns when the custom RPC points to a different chain than the target.
 - **On-Chain Record Inspection**: Look up past inspection requests and results using `getRequest(requestId)` or re-publish using `publishResult(requestId)`.
 
@@ -89,7 +91,7 @@ Create a `.env` file in the root directory:
 ```env
 PRIVATE_KEY=your_private_key_here
 REOWN_ID=your_reown_project_id_here
-CONTRACT_ADDRESS=0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E
+CONTRACT_ADDRESS=0x2cE7FC031228adEbf5d7f40D812284071A31FF35
 ```
 
 > **Note**: Vite is configured to read `REOWN_ID` directly without requiring the public `VITE_` prefix.
@@ -108,10 +110,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm test
 ```
 
-### 5. Deploy to Botchain Testnet
+### 5. Deploy to Botchain Mainnet
 
 ```bash
-npm run deploy:botchain
+npm run deploy:botchain-mainnet
 ```
 
 ---

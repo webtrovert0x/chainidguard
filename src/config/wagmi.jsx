@@ -3,6 +3,32 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { defineChain } from 'viem';
 import { mainnet, sepolia, arbitrum, base, polygon } from 'viem/chains';
 
+// Botchain Mainnet definition (Chain ID: 677, Native Token: BOT)
+export const botchainMainnet = defineChain({
+  id: 677,
+  name: 'Botchain Mainnet',
+  nativeCurrency: {
+    name: 'BOT',
+    symbol: 'BOT',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.botchain.ai'],
+    },
+    public: {
+      http: ['https://rpc.botchain.ai'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'BotchainScan',
+      url: 'https://scan.botchain.ai',
+    },
+  },
+  testnet: false,
+});
+
 // Botchain Testnet definition (Chain ID: 968, Native Token: BOT)
 export const botchainTestnet = defineChain({
   id: 968,
@@ -29,8 +55,8 @@ export const botchainTestnet = defineChain({
   testnet: true,
 });
 
-// Primary network is botchainTestnet; include common networks so AppKit can detect and switch them
-export const networks = [botchainTestnet, mainnet, sepolia, arbitrum, base, polygon];
+// Primary network is botchainMainnet; include common networks so AppKit can detect and switch them
+export const networks = [botchainMainnet, botchainTestnet, mainnet, sepolia, arbitrum, base, polygon];
 
 // Read strictly from REOWN_ID as requested
 export const projectId = (typeof process !== 'undefined' && process.env && process.env.REOWN_ID)
@@ -46,13 +72,13 @@ export const wagmiAdapter = new WagmiAdapter({
 createAppKit({
   adapters: [wagmiAdapter],
   networks,
-  defaultNetwork: botchainTestnet,
+  defaultNetwork: botchainMainnet,
   projectId: projectId || '00000000000000000000000000000000',
   metadata: {
     name: 'ChainID Guard',
-    description: 'Network configuration inspector for Botchain Testnet',
-    url: 'https://scan.bohr.life',
-    icons: ['https://scan.bohr.life/favicon.ico'],
+    description: 'Network configuration inspector for Botchain Mainnet (Chain ID: 677)',
+    url: 'https://chainidguard.vercel.app',
+    icons: ['https://chainidguard.vercel.app/chainid-guard-logo.png'],
   },
   themeMode: 'light',
   themeVariables: {

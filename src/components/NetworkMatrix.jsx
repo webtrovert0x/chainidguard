@@ -1,5 +1,6 @@
 import React from 'react';
-import { CheckCircle2, XCircle, AlertTriangle, HelpCircle, ArrowRight, ShieldCheck, Server, Wallet, Layers } from 'lucide-react';
+import { useSwitchChain } from 'wagmi';
+import { CheckCircle2, XCircle, AlertTriangle, HelpCircle, ArrowRight, ShieldCheck, Server, Wallet, Layers, ArrowRightLeft } from 'lucide-react';
 import { getChainInfo } from '../utils/chains';
 
 export default function NetworkMatrix({
@@ -10,6 +11,8 @@ export default function NetworkMatrix({
   rpcLoading,
   rpcError,
 }) {
+  const { switchChain, isPending: isSwitching } = useSwitchChain();
+
   const expectedNum = Number(expectedChainId);
   const walletNum = walletChainId ? Number(walletChainId) : null;
   const rpcNum = rpcChainId ? Number(rpcChainId) : null;
@@ -135,6 +138,17 @@ export default function NetworkMatrix({
           <div className="text-[11px] text-slate-500 font-mono mt-0.5">
             {walletNum !== null ? `0x${walletNum.toString(16)}` : 'Awaiting provider'}
           </div>
+
+          {walletNum !== null && !walletMatchesExpected && switchChain && (
+            <button
+              onClick={() => switchChain({ chainId: expectedNum })}
+              disabled={isSwitching}
+              className="mt-2 w-full py-1 px-2 rounded-md bg-rose-600 hover:bg-rose-700 text-white font-semibold text-[10px] flex items-center justify-center gap-1 shadow-xs transition-colors cursor-pointer"
+            >
+              <ArrowRightLeft className={`w-3 h-3 ${isSwitching ? 'animate-spin' : ''}`} />
+              <span>Switch to {expectedNum}</span>
+            </button>
+          )}
         </div>
 
         {/* 3. RPC-Reported */}

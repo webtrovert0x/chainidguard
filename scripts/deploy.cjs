@@ -3,8 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
+  const networkName = hre.network.name;
   console.log("--------------------------------------------------");
-  console.log("Deploying ChainIDGuard to Botchain Testnet (Chain ID: 968)...");
+  console.log(`Deploying ChainIDGuard to network: ${networkName}...`);
   console.log("--------------------------------------------------");
 
   const [deployer] = await hre.ethers.getSigners();
@@ -13,7 +14,7 @@ async function main() {
   const balance = await hre.ethers.provider.getBalance(deployer.address);
   console.log("Deployer balance:", hre.ethers.formatEther(balance), "BOT");
 
-  const ChainIDGuard = await hre.ethers.getContractFactory("ChainIDGuard");
+  const ChainIDGuard = await hre.ethers.getContractFactory("contracts/ChainIDGuard.sol:ChainIDGuard");
   const guard = await ChainIDGuard.deploy();
   await guard.waitForDeployment();
 
@@ -29,11 +30,11 @@ async function main() {
     fs.mkdirSync(frontendDir, { recursive: true });
   }
 
-  const contractArtifact = await hre.artifacts.readArtifact("ChainIDGuard");
+  const contractArtifact = await hre.artifacts.readArtifact("contracts/ChainIDGuard.sol:ChainIDGuard");
   const deploymentInfo = {
     address: contractAddress,
     chainId: Number(onchainChainId),
-    network: "botchainTestnet",
+    network: networkName,
     abi: contractArtifact.abi,
   };
 
@@ -59,12 +60,15 @@ async function main() {
     console.log("Updated .env with CONTRACT_ADDRESS");
   }
 
+  const explorerBase = Number(onchainChainId) === 677
+    ? "https://scan.botchain.ai"
+    : "https://scan.bohr.life";
+
   console.log("--------------------------------------------------");
-  console.log("Deployment complete! Explorer: https://scan.bohr.life/address/" + contractAddress);
+  console.log(`Deployment complete! Explorer: ${explorerBase}/address/${contractAddress}`);
 }
 
 main().catch((error) => {
   console.error("Deployment failed:", error);
   process.exitCode = 1;
 });
-

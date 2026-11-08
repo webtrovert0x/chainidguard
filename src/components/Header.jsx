@@ -1,14 +1,15 @@
 import React from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect, useSwitchChain } from 'wagmi';
 import { useAppKit } from '@reown/appkit/react';
-import { ShieldCheck, Wallet, ExternalLink, LogOut, Cpu } from 'lucide-react';
+import { ShieldCheck, Wallet, ExternalLink, LogOut, Cpu, ArrowRightLeft } from 'lucide-react';
 
 export default function Header() {
   const { address, isConnected, chain } = useAccount();
   const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
   const { open } = useAppKit();
 
-  const isBotchain = chain?.id === 968;
+  const isBotchain = chain?.id === 677;
 
   return (
     <header className="bg-white border-b border-blue-100 shadow-sm sticky top-0 z-30">
@@ -16,22 +17,23 @@ export default function Header() {
         
         {/* Brand & Target Network */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-            <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-blue-500/20 border border-blue-200/80 bg-slate-900 flex items-center justify-center">
+            <img src="/chainid-guard-logo.png" alt="ChainID Guard Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-lg text-slate-900 tracking-tight">ChainID Guard</span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                v1.0
+                Mainnet
               </span>
             </div>
             <p className="text-xs text-slate-500 flex items-center space-x-1.5">
               <span>Target:</span>
-              <span className="font-medium text-blue-600">Botchain Testnet (Chain ID 968)</span>
+              <img src="/botchain-logo.png" alt="BOT Chain" className="w-3.5 h-3.5 object-contain" />
+              <span className="font-medium text-blue-600">Botchain Mainnet (Chain ID 677)</span>
               <span className="text-slate-300">•</span>
               <a
-                href="https://scan.bohr.life"
+                href="https://scan.botchain.ai"
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-500 hover:text-blue-700 hover:underline flex items-center gap-0.5"
@@ -45,17 +47,28 @@ export default function Header() {
         {/* Right Action: Wallet & Network Indicator */}
         <div className="flex items-center space-x-3">
           {isConnected && chain && (
-            <div
-              className={`hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium border ${
+            <button
+              onClick={() => {
+                if (!isBotchain && switchChain) {
+                  switchChain({ chainId: 677 });
+                }
+              }}
+              title={isBotchain ? 'Connected to Botchain Mainnet' : 'Click to switch to Botchain Mainnet (677)'}
+              className={`hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                 isBotchain
-                  ? 'bg-blue-50/70 border-blue-200 text-blue-700'
-                  : 'bg-amber-50 border-amber-200 text-amber-800'
+                  ? 'bg-blue-50/70 border-blue-200 text-blue-700 cursor-default'
+                  : 'bg-amber-50 hover:bg-amber-100 border-amber-200 text-amber-900 cursor-pointer shadow-sm hover:scale-[1.02]'
               }`}
             >
-              <span className={`w-2 h-2 rounded-full ${isBotchain ? 'bg-blue-600 animate-pulse' : 'bg-amber-500'}`} />
+              <span className={`w-2 h-2 rounded-full ${isBotchain ? 'bg-blue-600 animate-pulse' : 'bg-amber-500 animate-pulse'}`} />
               <span>{chain.name || `Chain ${chain.id}`}</span>
               <span className="text-slate-400 font-mono">({chain.id})</span>
-            </div>
+              {!isBotchain && (
+                <span className="text-[10px] font-bold text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md flex items-center gap-1 shadow-xs">
+                  <ArrowRightLeft className="w-2.5 h-2.5" /> Switch to Mainnet 677
+                </span>
+              )}
+            </button>
           )}
 
           {isConnected ? (
@@ -92,4 +105,3 @@ export default function Header() {
     </header>
   );
 }
-

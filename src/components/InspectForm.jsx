@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, usePublicClient, useSwitchChain } from 'wagmi';
 import { CHAIN_ID_GUARD_ABI, DEFAULT_CONTRACT_ADDRESS } from '../contracts/ChainIDGuardABI';
 import { POPULAR_CHAINS } from '../utils/chains';
-import { Send, CheckCircle2, XCircle, ArrowRight, RefreshCw, ExternalLink, ShieldAlert, Sparkles } from 'lucide-react';
+import { Send, CheckCircle2, XCircle, ArrowRight, RefreshCw, ExternalLink, ShieldAlert, Sparkles, AlertTriangle, ArrowRightLeft } from 'lucide-react';
 import { decodeEventLog } from 'viem';
 
 export default function InspectForm({
@@ -16,6 +16,7 @@ export default function InspectForm({
   onTxCompleted,
 }) {
   const { isConnected, address, chain } = useAccount();
+  const { switchChain, isPending: isSwitchingChain } = useSwitchChain();
   const publicClient = usePublicClient();
 
   const [contractAddress, setContractAddress] = useState(DEFAULT_CONTRACT_ADDRESS || '');
@@ -91,8 +92,8 @@ export default function InspectForm({
         const finalResult = verifiedData || {
           requestId: null,
           expectedChainId: Number(expectedChainId),
-          actualChainId: chain?.id || 968,
-          isMatch: Number(expectedChainId) === (chain?.id || 968),
+          actualChainId: chain?.id || 677,
+          isMatch: Number(expectedChainId) === (chain?.id || 677),
           gasUsed: receipt.gasUsed.toString(),
           blockNumber: Number(receipt.blockNumber),
         };
@@ -139,7 +140,7 @@ export default function InspectForm({
                 type="number"
                 value={expectedChainId}
                 onChange={(e) => setExpectedChainId(e.target.value)}
-                placeholder="e.g. 968"
+                placeholder="e.g. 677"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-mono text-sm bg-white"
               />
             </div>
@@ -155,13 +156,13 @@ export default function InspectForm({
                 Target Presets:
               </span>
               <span className="text-[10px] text-blue-600 font-medium">
-                Primary: Botchain Testnet (968)
+                Primary: Botchain Mainnet (677)
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {POPULAR_CHAINS.map((c) => {
                 const isSelected = Number(expectedChainId) === c.id;
-                const isPrimary = c.id === 968;
+                const isPrimary = c.id === 677;
                 return (
                   <button
                     key={c.id}
@@ -208,7 +209,7 @@ export default function InspectForm({
                 type="text"
                 value={rpcUrl}
                 onChange={(e) => setRpcUrl(e.target.value)}
-                placeholder="https://rpc.bohr.life"
+                placeholder="https://rpc.botchain.ai"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-mono text-xs bg-white"
               />
               <button
@@ -231,7 +232,7 @@ export default function InspectForm({
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              ChainIDGuard Contract Address (Botchain Testnet)
+              ChainIDGuard Contract Address (Botchain Mainnet)
             </label>
             <input
               type="text"
@@ -253,6 +254,30 @@ export default function InspectForm({
                 <span className="font-semibold">On-Chain Inspection:</span> Submits a lightweight transaction to execute <code className="bg-white px-1 py-0.5 rounded text-blue-700 border border-blue-200">requestNetworkCheck()</code> on-chain. The contract evaluates <code className="bg-white px-1 py-0.5 rounded text-blue-700 border border-blue-200">block.chainid</code> and emits verified events.
               </div>
             </div>
+
+            {/* In-form Mismatch Warning & 1-Click Switch Button */}
+            {isConnected && chain?.id && chain.id !== Number(expectedChainId) && (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-2.5 shadow-xs">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-amber-900">Wallet Network Mismatch Detected</span>
+                    <p className="text-[11px] text-amber-800 mt-0.5 leading-relaxed">
+                      Your wallet is currently connected to <strong>{chain.name || `Chain ${chain.id}`} ({chain.id})</strong>. Your selected inspection target is <strong>{expectedChainId === '677' ? 'Botchain Mainnet (677)' : `Chain ${expectedChainId}`}</strong>.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => switchChain && switchChain({ chainId: Number(expectedChainId) })}
+                  disabled={isSwitchingChain}
+                  className="w-full py-2 px-3 rounded-lg bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                >
+                  <ArrowRightLeft className={`w-3.5 h-3.5 ${isSwitchingChain ? 'animate-spin' : ''}`} />
+                  <span>Switch Wallet to {expectedChainId === '677' ? 'Botchain Mainnet (677)' : `Chain ${expectedChainId}`}</span>
+                </button>
+              </div>
+            )}
 
             <button
               onClick={handleSendInspection}
@@ -330,18 +355,39 @@ export default function InspectForm({
                 </div>
               </div>
 
+              {!txResult.isMatch && (
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 text-xs space-y-1">
+                  <div className="font-bold flex items-center gap-1.5 text-rose-800">
+                    <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
+                    <span>Cross-Network Hazard Detected</span>
+                  </div>
+                  <p className="text-[11px] text-rose-700 leading-relaxed">
+                    The smart contract executed on-chain under <code className="font-bold font-mono">block.chainid = {txResult.actualChainId}</code> ({txResult.actualChainId === 968 ? 'Botchain Testnet' : `Chain ${txResult.actualChainId}`}), but your target was <code className="font-bold font-mono">Chain ID {txResult.expectedChainId}</code> ({txResult.expectedChainId === 677 ? 'Botchain Mainnet' : `Chain ${txResult.expectedChainId}`}).
+                  </p>
+                  {switchChain && (
+                    <button
+                      type="button"
+                      onClick={() => switchChain({ chainId: txResult.expectedChainId })}
+                      className="mt-1 text-xs text-rose-800 hover:text-rose-950 font-bold underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <ArrowRightLeft className="w-3 h-3" /> Click here to switch wallet to {txResult.expectedChainId === 677 ? 'Botchain Mainnet (677)' : `Chain ${txResult.expectedChainId}`}
+                    </button>
+                  )}
+                </div>
+              )}
+
               {lastTxHash && (
                 <div className="pt-1 flex items-center justify-between text-[11px]">
                   <span className="text-slate-400 font-mono truncate max-w-[200px]">
                     {lastTxHash}
                   </span>
                   <a
-                    href={`https://scan.bohr.life/tx/${lastTxHash}`}
+                    href={`${chain?.id === 968 ? 'https://scan.bohr.life' : 'https://scan.botchain.ai'}/tx/${lastTxHash}`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1"
                   >
-                    View on BohrScan <ExternalLink className="w-3 h-3" />
+                    View on Explorer <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
               )}

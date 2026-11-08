@@ -2,8 +2,8 @@
 
 **A Decentralized Verification Standard for Eliminating Cross-Network Execution Hazards in EVM Environments**
 
-*Target Network: Botchain Testnet (Chain ID: 968)*  
-*Deployed Contract: `0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E`*  
+*Target Network: Botchain Mainnet (Chain ID: 677)*  
+*Deployed Contract: `0x2cE7FC031228adEbf5d7f40D812284071A31FF35`*  
 *Authors: ChainID Guard Research Team*  
 *Repository: https://github.com/webtrovert0x/chainidguard*
 
@@ -125,19 +125,21 @@ struct CheckResult {
 
 ---
 
-## 4. Primary Deployment: Botchain Testnet
+## 4. Primary Deployment: Botchain Mainnet
 
-ChainID Guard has been officially deployed to **Botchain Testnet**:
+ChainID Guard is deployed to **Botchain Mainnet**:
 
 | Parameter | Value |
 | :--- | :--- |
-| **Network Name** | Botchain Testnet |
-| **Chain ID** | `968` |
+| **Network Name** | Botchain Mainnet |
+| **Chain ID** | `677` |
 | **Native Token** | `BOT` (18 Decimals) |
-| **RPC Endpoint** | `https://rpc.bohr.life` |
-| **Block Explorer** | `https://scan.bohr.life` |
-| **Contract Address** | `0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E` |
-| **Contract Verification** | [View on BohrScan](https://scan.bohr.life/address/0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E) |
+| **RPC Endpoint** | `https://rpc.botchain.ai` |
+| **Block Explorer** | `https://scan.botchain.ai` |
+| **Contract Address** | `0x2cE7FC031228adEbf5d7f40D812284071A31FF35` |
+| **Contract Verification** | [View Verified Code on BotchainScan](https://scan.botchain.ai/address/0x2cE7FC031228adEbf5d7f40D812284071A31FF35#code) |
+
+*Testnet deployment remains active on Botchain Testnet (`Chain ID: 968`, Contract: `0x828a2a7a65f67AC30A7Ecc1d5f466fc28532Fe5E`, BohrScan).*
 
 ---
 
@@ -156,3 +158,4 @@ ChainID Guard solves one of the most persistent, expensive operational problems 
 ---
 
 *© 2026 ChainID Guard Protocol. Licensed under the MIT License.*
+

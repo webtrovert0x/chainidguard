@@ -232,7 +232,7 @@ export default function HistoryLog({ history = [], contractAddress = DEFAULT_CON
                     <td className="py-2.5 px-4 font-mono text-slate-500 truncate max-w-[140px]">
                       {item.txHash ? (
                         <a
-                          href={`https://scan.bohr.life/tx/${item.txHash}`}
+                          href={`${item.actualChainId === 968 ? 'https://scan.bohr.life' : 'https://scan.botchain.ai'}/tx/${item.txHash}`}
                           target="_blank"
                           rel="noreferrer"
                           className="text-blue-600 hover:underline flex items-center gap-1"
